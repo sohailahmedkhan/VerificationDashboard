@@ -37,7 +37,7 @@ You can run the app locally by running the following command:
 
 ## 🔎 Usage
 
-Using GVision is simple and straightforward:
+Using the dashboard is easy:
 
 - Upload your Google Cloud Vision API key in JSON format by clicking on the `Upload a config file` button in the sidebar.
 - Once the key is uploaded, the app will automatically authenticate with the Google Cloud Vision API.
@@ -49,8 +49,12 @@ You can also find links to the Google Cloud Vision API documentation and pricing
 
 To reset the app to its default state or to clear the uploaded image and results, click on the `Reset app` button.
 
-
 ## 📚 Resources
 
 - [Google Cloud Vision API Documentation](https://cloud.google.com/vision/docs)
 - [Google Cloud Vision API Pricing](https://cloud.google.com/vision/pricing)
+
+
+### Credits
+
+https://github.com/GONZOsint/gvision/tree/main
