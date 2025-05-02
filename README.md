@@ -55,6 +55,6 @@ To reset the app to its default state or to clear the uploaded image and results
 - [Google Cloud Vision API Pricing](https://cloud.google.com/vision/pricing)
 
 
-### Credits
+## Credits
 
 https://github.com/GONZOsint/gvision/tree/main
