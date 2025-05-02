@@ -10,6 +10,8 @@ import folium
 from PIL import Image
 import xyzservices.providers as xyz
 import json
+import base64
+from openai import OpenAI
 
 # Set page style
 st.set_page_config(page_title='VerificationDash', page_icon='📷', layout='wide')
@@ -42,6 +44,12 @@ config_file = config_slot.file_uploader('Upload a config file', type=['json'])
 # Load the credentials from the config file
 if config_file is not None:
     content = config_file.read()
+
+    # get openai key
+    json_str = content.decode('utf-8')
+    config_2 = json.loads(json_str)
+    openai_api_key = config_2.get("openai_api_key")
+
     try:
         credentials = service_account.Credentials.from_service_account_info(json.loads(content))
         client = vision.ImageAnnotatorClient(credentials=credentials)
@@ -65,7 +73,6 @@ if config_file is not None:
 
         # Upload image
         uploaded_file = st.file_uploader('Choose an image', type=['jpg', 'jpeg', 'png'], accept_multiple_files=False)
-
 
         def create_folium_map(landmarks):
             providers = xyz.flatten()
@@ -112,8 +119,12 @@ if config_file is not None:
 
 
         if uploaded_file is not None:
+            # Encode as base64
+            file_bytes = uploaded_file.read()
+            base64_encoded_openai = base64.b64encode(file_bytes).decode('utf-8')
+            
             with st.spinner('Analyzing the image...'):
-                content = uploaded_file.read()
+                content = file_bytes
                 image = types.Image(content=content)
 
                 # LANDMARK DETECTION
@@ -238,7 +249,34 @@ if config_file is not None:
                     st.write('❌ No web entities detected.')
 
                 st.write('-------------------')
+        
+            try:
+                client = OpenAI(api_key=openai_api_key)
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": "Analyze the image and describe what it primarily depicts: if it shows a person, give details about their appearance, identity (if known), attire, and activity; if it shows a place or landmark, describe it with relevant context and provide estimated coordinates in this format: Coordinates: latitude, longitude; if it shows another type of subject, describe it and provide relevant information."},
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": f"data:image/jpeg;base64,{base64_encoded_openai}"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    max_tokens=1000
+                )
 
+                # Display the AI's response
+                st.subheader("OpenAI Response:")
+                st.write(response.choices[0].message.content)
+
+            except Exception as e:
+                st.error(f"API Error: {e}")
         else:
             st.write('📁 Please upload an image.')
         config_slot.empty()
