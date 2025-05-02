@@ -1,4 +1,5 @@
-<!-- ![alt gvision_1](https://imgur.com/KnxDEKq.png) -->
+
+# The Verification Dashboard
 
 The Verification Dashboard is designed to streamline multiple verification steps in one convenient location. It integrates features such as reverse image search, OCR, landmark detection, and automated geolocation. Leveraging the power of the Google Cloud Vision API and the OpenAI API, the dashboard enables fast, efficient access to valuable information, all in a single interface.
 
