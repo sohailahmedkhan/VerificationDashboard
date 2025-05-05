@@ -136,7 +136,7 @@ if config_file is not None:
                 col1, col2 = st.columns(2)
                 with col1:
                     image = Image.open(io.BytesIO(content))
-                    st.image(image, use_container_width=True, caption='')
+                    st.image(image, caption='')
                 if landmarks:
                     with col2:
                         folium_map = create_folium_map(landmarks)
@@ -242,7 +242,7 @@ if config_file is not None:
                             if i % 3 == 0:
                                 cols = st.columns(3)
                             with cols[i % 3]:
-                                st.image(image.url, use_container_width=True, caption=image.url)
+                                st.image(image.url, caption=image.url)
                     else:
                         st.write('❌ No visually similar images found.')
                 else:
